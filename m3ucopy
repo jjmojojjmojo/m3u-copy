@@ -1,0 +1,25 @@
+#!/usr/bin/env boot
+
+(set-env!
+  :source-paths #{"src"}
+  :dependencies '[[me.raynes/fs "1.4.6"]
+                  [pandect "0.5.1"]
+                  [green-tags "0.3.0-alpha"]])
+
+(require '[boot.cli :as cli])
+(require '[m3ucopy.core :as core])
+
+(cli/defclifn -main 
+  "Usage: m3ucopy [options] [source] [dest]"
+  [d dry-run bool "Dry-run mode. Just print what would be done to stdout"
+   a alg-style STYLE kw  "Specify the path style. Options are: same, uid, artist-album artist-album-path. Default is 'same'"
+   s spaces-ok bool "Are spaces OK? If not, they will be replaced with underscores. Defaults to true."]
+  (let [path (first *args*)
+        dest (second *args*)
+        dry-run (:dry-run *opts* false)
+        alg-style (:alg-style *opts* :same)
+        spaces-ok (:spaces-ok *opts* true)]
+      (core/copy-m3u path dest 
+        :dry-run dry-run 
+        :style alg-style 
+        :spaces-ok spaces-ok)))
