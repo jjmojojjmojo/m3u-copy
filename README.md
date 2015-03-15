@@ -98,7 +98,7 @@ The path style setting controls how paths will be created relative to the m3u fi
 ## FEATURES
 
 ### No duplicates
-Avoid copying the same file if it already exists. 
+Avoid copying the same file if it already exists. Makes it easy to manage files using multiple tools.
 
 ### Path mangling
 Paths in the provided M3U file need to be made relative to where the files are stored on the media.
@@ -124,6 +124,18 @@ I'm sure something like this exists somewhere :) This project exists mostly for 
 
 ## NEAR TERM GOALS
 The main thing is adding tests. Lots and lots of tests.
+
+### Refinements and Enhancements
+* Let the user specify the name of the target m3u file (currently it uses the name of the source playlist).
+* Verify the copy-check is sane.
+* Estimate size of files to copy and warn user if it exceeds available space.
+* Figure out exactly which characters are OK or not for most file systems; allow the user to specify what's OK and what to replace it with.
+* Let the user construct their own paths using a template string.
+* Derive missing id3 tag information from path names.
+* Let the user shuffle playlist order when writing.
+* When album/artist sub-directories are not used, there may be issues with certain players or filesystems where a long directory listing may degrade performance. Verify this is really a problem, and allow for sub-directories to be generated to group files into manageable chunks. 
+* Investigate the utility of copying files in parallel to make things faster.
+* Remove embedded album art tags to save space for players that don't support it.
 
 ## FUTURE
 I have ideas for the near-term once the basic functionality is complete:
