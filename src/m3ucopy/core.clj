@@ -34,7 +34,7 @@
   [filename &{:keys [replacement] :or {replacement "_"}}]
   "Given a filename, return that name with commonly bad file system chars replaced
    with :replacement character (defaults to underscore)"
-  (string/replace filename #"[\\/?\,]" replacement))
+  (string/replace filename #"^[.]+|[\\/?,]+" replacement))
 
 ;; custom destination paths, revisit later.. 
 ;; (defn expand-interp
@@ -97,15 +97,23 @@
 (defn artist-album-name
   [path dest-dir]
   "Construct a path where the base file name contains the artist, album and track number"
-  (let [{:keys [:album-artist :album :title :track :extension]} (smart-tags path)]
-    (io/file dest-dir (bad-chars (str album-artist " - " album " - " track " - " title extension)))))
+  (let [{:keys [:album-artist :artist :album :title :track :extension]} (smart-tags path)
+        parts [artist album track title]
+        filename (str (string/join " - " parts) extension)]
+    (io/file dest-dir (bad-chars filename))))
 
 (defn artist-album-path
   [path dest-dir]
   "Create a standard 'Artist/Album/00X-Title.ext' style destination path"
-  (let [{:keys [:album-artist :album :title :track :extension]} (smart-tags path)
-       filename (bad-chars (str track " - " title extension))]
-    (io/file dest-dir (bad-chars album-artist) (bad-chars album) filename)))
+  (let [{:keys [:album-artist :artist :album :title :track :extension]} (smart-tags path)
+        ;; Don't add the artist unless this is a compilation and the artist 
+        ;; differs from the album-artist
+        parts (if (not= album-artist artist) [track artist title] [track title])
+        filename (str (string/join " - " parts) extension)]
+    (io/file dest-dir 
+       (bad-chars album-artist) 
+       (bad-chars album) 
+       (bad-chars filename))))
 
 (defn- construct-path
   [path dest-dir &{:keys [style] :or {style :same}}]

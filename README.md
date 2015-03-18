@@ -127,6 +127,7 @@ The main thing is adding tests. Lots and lots of tests.
 
 ### Refinements and Enhancements
 * Let the user specify the name of the target m3u file (currently it uses the name of the source playlist).
+* Support more than one source file.
 * Verify the copy-check is sane.
 * Estimate size of files to copy and warn user if it exceeds available space.
 * Figure out exactly which characters are OK or not for most file systems; allow the user to specify what's OK and what to replace it with.
@@ -160,3 +161,19 @@ Run a service to monitor the source directories and automatically add/remove/upd
 
 #### Playlist Management
 Inspect, create, and modify playlists.
+
+## RUNNING THE TESTS
+In this repository, there are a handful of files in the `testdata` directory, random selections of entrants from [The Free Music Archive's "microSong Challenge"](http://freemusicarchive.org/music/microSong_Challenge/2015021275957958/). All of these songs are released into the public domain, they're all super small, and properly tagged. 
+
+The files have been grouped into three playlists.
+
+To run the tests, use boot:
+
+```shell
+$ boot test
+
+Testing m3ucopy.tests
+
+Ran 9 tests containing 13 assertions.
+0 failures, 0 errors.
+```

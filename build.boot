@@ -1,5 +1,6 @@
 (require '[boot.pod :as pod])
 (require '[clojure.string :as string])
+(require '[clojure.test :as testing])
 
 (set-env!
   :source-paths #{"src"}
@@ -9,4 +10,9 @@
 
 (deftask build
   "Construct a standalone jar file")
-  
+
+(deftask test
+  "Run the tests"
+  []
+  (require '[m3ucopy.tests])
+  (testing/run-tests 'm3ucopy.tests))

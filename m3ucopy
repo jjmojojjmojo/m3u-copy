@@ -10,16 +10,19 @@
 (require '[m3ucopy.core :as core])
 
 (cli/defclifn -main 
-  "Usage: m3ucopy [options] [source] [dest]"
+  "M3UCOPY: copy M3U playlists and associated files from one place to another
+  Usage: m3ucopy [options] [source1... sourceX] [dest]"
   [d dry-run bool "Dry-run mode. Just print what would be done to stdout"
    a alg-style STYLE kw  "Specify the path style. Options are: same, uid, artist-album artist-album-path. Default is 'same'"
    s spaces-ok bool "Are spaces OK? If not, they will be replaced with underscores. Defaults to true."]
-  (let [path (first *args*)
-        dest (second *args*)
+  (let [paths (butlast *args*)
+        dest (last *args*)
         dry-run (:dry-run *opts* false)
         alg-style (:alg-style *opts* :same)
         spaces-ok (:spaces-ok *opts* true)]
+        
+    (doseq [path paths]
       (core/copy-m3u path dest 
         :dry-run dry-run 
         :style alg-style 
-        :spaces-ok spaces-ok)))
+        :spaces-ok spaces-ok))))
